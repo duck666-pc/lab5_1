@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <html>
 <head>
     <title>Sửa Sản phẩm</title>
@@ -28,9 +28,16 @@
 
     <p>
         Ngày nhập:
-        <fmt:formatDate var="dateValue" value="${product.lastRestockDate}"
-                        pattern="yyyy-MM-dd'T'HH:mm"/>
-        <input type="datetime-local" name="lastRestockDate" value="${dateValue}">
+        <%
+            String dateValue = "";
+            if (request.getAttribute("product") != null) {
+                model.Product p = (model.Product) request.getAttribute("product");
+                if (p.getLastRestockDate() != null) {
+                    dateValue = p.getLastRestockDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+                }
+            }
+        %>
+        <input type="datetime-local" name="lastRestockDate" value="<%= dateValue %>">
     </p>
 
     <button type="submit">Cập nhật</button>
